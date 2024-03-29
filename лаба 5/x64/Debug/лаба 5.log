@@ -1,0 +1,3 @@
+﻿  лаба 5.cpp
+C:\Users\vikag\source\repos\лаба 5\лаба 5.cpp(63): warning C4715: D_Complex::qC: значение возвращается не при всех путях выполнения
+  лаба 5.vcxproj -> C:\Users\vikag\source\repos\лаба 5\x64\Debug\лаба 5.exe
