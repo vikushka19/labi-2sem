@@ -32,36 +32,6 @@ public:
         cout << "Деструктор вызван" << endl;//деструктор
     }
 
-    //функция нахождения скалярного произведения двух радиус-векторов
-    double scalarC(D_Complex a, D_Complex b) {
-        return (a.real * b.real + a.imag * b.imag);
-    }
-
-    //функция нахождения модуля комплексного числа
-    double absC() {
-        return sqrt(real * real + imag * imag);
-    }
-
-    //функция нахождения квадранта, в котором находится радиус-вектор
-    int qC() {
-        if (real == 0) {
-            if (imag == 0)//находится в начале координат
-                return 5;
-            if (imag != 0)//находится на мнимой оси
-                return 6;
-        }
-        else if (real != 0 && imag == 0)
-            return 7;//находится на действительной оси
-        else if (real > 0 && imag > 0)
-            return 1;//1 четверть
-        else if (real < 0 && imag > 0)
-            return 2;//2 четверть
-        else if (real < 0 && imag < 0)
-            return 3;//3 четверть
-        else
-            return 4; //real > 0 && imag < 0  //4 четверть
-    }
-
     D_Complex& operator++() {//префиксный
         real++;
         return *this;
@@ -118,7 +88,65 @@ public:
         in >> c.real >> c.imag;
         return in;
     }
+
+    friend double scalarC(D_Complex a, D_Complex b);//скалярное произведение
+
+    friend int qC(const D_Complex& c);
+
+    double absC() {
+        return sqrt(real * real + imag * imag);//модуль
+    }
 };
+//ВНЕШНИЕ ФУНКЦИИ
+
+//функция нахождения скалярного произведения двух радиус-векторов
+double scalarC(D_Complex a,D_Complex b) {
+    return (a.real * b.real + a.imag * b.imag);
+}
+
+//максимальный модуль
+D_Complex MAX_absC(D_Complex a, D_Complex b) {
+    cout << "Модуль числа num1: " << a.absC() << endl;
+    cout << "Модуль числа num2: " << b.absC() << endl;
+
+    cout << "Комплексное число с максимальным модулем: ";
+    if (a.absC() > b.absC()) {
+        cout << a << endl;
+        return a;
+    }
+    else if (a.absC() < b.absC()) {
+        cout << b << endl;
+        return b;
+    }
+    else {
+        cout << "Числа равны." << endl;
+    }
+}
+//функция нахождения квадранта, в котором находится радиус-вектор
+int qC(const D_Complex& c) {
+    if (c.real == 0 && c.imag == 0)
+        return 1;
+    if (c.real == 0) {
+        if (c.imag > 0)
+            return 2;
+        if (c.imag < 0)
+            return 4;
+    }
+    if (c.imag == 0) {
+        if (c.real >= 0)
+            return 1;
+        if (c.real < 0)
+            return 3;
+    }
+    else if (c.real > 0 && c.imag > 0)
+        return 1;
+    else if (c.real < 0 && c.imag > 0)
+        return 2;
+    else if (c.real < 0 && c.imag < 0)
+        return 3;
+    else
+        return 4;
+}
 
 int main() {
     setlocale(LC_ALL, "RU");
@@ -145,24 +173,13 @@ int main() {
     cout << "num3 += num1: " << num3 << endl;
 
     //скалярное произведение двух комплексных чисел
-    cout << "Скалярное произведение num1 и num2: " << num1.scalarC(num1, num2) << endl;
+    cout << "Скалярное произведение num1 и num2: " << scalarC(num1, num2) << endl;
 
-    //модули для проверки
-    cout <<"Модуль числа num1: " << num1.absC() << endl;
-    cout <<"Модуль числа num2: " << num2.absC() << endl;
-  
-    cout << "Комплексное число с максимальным модулем: ";
-    if (num1.absC() > num2.absC()) {
-        cout << num1 <<endl;
-    }
-    else if(num1.absC() < num2.absC()) {
-        cout << num2 << endl;
-    }
-    else {
-        cout << "Числа равны." << endl;
-    }
+    //число с максимальным модулем
+    D_Complex maximum = MAX_absC(num1, num2);
+    
     //определение квадранта, в котором находится радиус-вектор
-    cout << "Квадрант числа 1: " << num1.qC() << endl;
+    cout << "Квадрант числа 1: " << qC(num1) << endl;
 
     D_Complex pre_increment = ++num1; //префиксный инкремент
     cout << "Число 1 после префиксного инкремента: " << pre_increment << endl;
@@ -172,7 +189,7 @@ int main() {
     cout << "Число 1 после постфиксного инкремента: " << num1 << endl;
 
     //определение квадранта, в котором находится радиус-вектор
-    cout << "Квадрант числа 1 после применения инкрементов: " << num1.qC() << endl;
+    cout << "Квадрант числа 1 после применения инкрементов: " << qC(num1) << endl;
 
     return 8;
 }
